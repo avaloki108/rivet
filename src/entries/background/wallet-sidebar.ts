@@ -1,5 +1,11 @@
 import { settingsStore } from '../../zustand'
 
+function isFirefox(): boolean {
+  return (
+    typeof navigator !== 'undefined' && navigator.userAgent.includes('Firefox')
+  )
+}
+
 export function setupWalletSidebarHandler() {
   chrome.runtime.onMessage.addListener((message, sender) => {
     if (message.type === 'openWallet') {
@@ -15,7 +21,14 @@ export function setupWalletSidebarHandler() {
         (method === 'personal_sign' && !bypassSignatureAuth) ||
         (method === 'wallet_sendCalls' && !bypassTransactionAuth)
       ) {
-        chrome.sidePanel.open({ tabId: sender.tab!.id! })
+        // Firefox doesn't support sidePanel, use action popup instead
+        if (isFirefox() || !chrome.sidePanel) {
+          // For Firefox, the popup is already configured in manifest
+          // We can't programmatically open it, but it's available on click
+          console.log('Wallet popup available via action button')
+        } else {
+          chrome.sidePanel.open({ tabId: sender.tab!.id! })
+        }
       }
     }
   })

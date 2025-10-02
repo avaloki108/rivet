@@ -9,13 +9,16 @@
   "scripts": {
     "anvil": "anvil --fork-url https://cloudflare-eth.com",
     "build": "tsc && bun run build:ds && vite build && bun run build:inpage",
+    "build:firefox": "tsc && bun run build:ds && cross-env BROWSER=firefox vite build && cross-env BROWSER=firefox bun run build:inpage",
     "build:ds": "vite build -c src/design-system/vite.config.ts",
     "build:inpage": "vite build -c vite.config.inpage.ts",
     "clean": "rimraf dist",
     "chrome": "web-ext run -t chromium --start-url \"http://localhost:5173\" --source-dir ./dist/dev",
+    "firefox": "web-ext run -t firefox-desktop --start-url \"http://localhost:5173\" --source-dir ./dist/dev",
     "contracts:build": "forge build --config-path test/contracts/foundry.toml && bun scripts/generate-typed-artifacts.ts",
     "contracts:deploy": "bun scripts/deploy-contracts.ts",
     "dev": "cross-env NODE_ENV=development bun run build:inpage && vite & (sleep 1 && bun run chrome)",
+    "dev:firefox": "cross-env NODE_ENV=development BROWSER=firefox bun run build:inpage && vite & (sleep 1 && bun run firefox)",
     "format": "biome format . --write",
     "lint": "biome check .",
     "lint:fix": "bun run lint --apply",
@@ -25,7 +28,8 @@
     "symbols": "bun scripts/symbols.ts",
     "sync": "git submodule init && git submodule update",
     "typecheck": "tsc --noEmit",
-    "zip": "web-ext build --source-dir ./dist/build --artifacts-dir ./dist --filename extension.zip"
+    "zip": "web-ext build --source-dir ./dist/build-chrome --artifacts-dir ./dist --filename extension.zip",
+    "zip:firefox": "web-ext build --source-dir ./dist/build-firefox --artifacts-dir ./dist --filename extension-firefox.zip"
   },
   "dependencies": {
     "@capsizecss/core": "^3.1.0",

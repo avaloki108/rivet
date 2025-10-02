@@ -1,4 +1,5 @@
 export { decodeEventLogs_guessed, guessAbiItem } from './abi'
+export { getBrowserAPI, isChrome, isFirefox } from './browser'
 export { capitalize } from './capitalize'
 export { deepEqual } from './deepEqual'
 export { isDomain } from './isDomain'

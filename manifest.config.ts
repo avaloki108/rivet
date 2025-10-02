@@ -1,7 +1,17 @@
 import pkg from './package.json'
 
-export const getManifest = ({ dev }: { dev?: boolean }) =>
-  ({
+type Browser = 'chrome' | 'firefox'
+
+export const getManifest = ({
+  dev,
+  browser = 'chrome',
+}: {
+  dev?: boolean
+  browser?: Browser
+}) => {
+  const isFirefox = browser === 'firefox'
+
+  const manifest: any = {
     name: `${pkg.extension.name}${dev ? ' (dev)' : ''}`,
     description: pkg.extension.description,
     version: pkg.version,
@@ -13,10 +23,19 @@ export const getManifest = ({ dev }: { dev?: boolean }) =>
         '48': `icons/icon${dev ? '-dev' : ''}@48w.png`,
         '128': `icons/icon${dev ? '-dev' : ''}@128w.png`,
       },
+      ...(isFirefox
+        ? {
+            default_popup: 'src/entries/iframe/index.html',
+          }
+        : {}),
     },
-    background: {
-      service_worker: 'src/entries/background/index.ts',
-    },
+    background: isFirefox
+      ? {
+          scripts: ['src/entries/background/index.ts'],
+        }
+      : {
+          service_worker: 'src/entries/background/index.ts',
+        },
     content_scripts: [
       {
         matches: ['*://*/*'],
@@ -25,9 +44,6 @@ export const getManifest = ({ dev }: { dev?: boolean }) =>
         all_frames: true,
       },
     ],
-    side_panel: {
-      default_path: 'src/entries/iframe/index.html',
-    },
     icons: {
       '16': `icons/icon${dev ? '-dev' : ''}@16w.png`,
       '32': `icons/icon${dev ? '-dev' : ''}@32w.png`,
@@ -62,4 +78,21 @@ export const getManifest = ({ dev }: { dev?: boolean }) =>
         description: 'Toggle Theme',
       },
     },
-  }) satisfies chrome.runtime.Manifest
+  }
+
+  // Add side_panel only for Chrome
+  if (!isFirefox) {
+    manifest.side_panel = {
+      default_path: 'src/entries/iframe/index.html',
+    }
+  }
+
+  // Filter out sidePanel permission for Firefox
+  if (isFirefox) {
+    manifest.permissions = manifest.permissions.filter(
+      (p: string) => p !== 'sidePanel',
+    )
+  }
+
+  return manifest as chrome.runtime.Manifest
+}

@@ -1,7 +1,16 @@
+function isFirefox(): boolean {
+  return (
+    typeof navigator !== 'undefined' && navigator.userAgent.includes('Firefox')
+  )
+}
+
 export function setupContextMenu() {
-  chrome.sidePanel
-    .setPanelBehavior({ openPanelOnActionClick: true })
-    .catch((error) => console.error(error))
+  // sidePanel is only available in Chrome
+  if (!isFirefox() && chrome.sidePanel) {
+    chrome.sidePanel
+      .setPanelBehavior({ openPanelOnActionClick: true })
+      .catch((error) => console.error(error))
+  }
 
   // TODO: Only create context menu if selected text is "openable" in Rivet.
   // chrome.contextMenus.create({

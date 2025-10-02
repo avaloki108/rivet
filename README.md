@@ -27,7 +27,7 @@ Rivet is aimed to be **contributor first & friendly**. If you would like to cont
 ## Download
 
 - **Chromium (Chrome, Brave, Arc, etc)**: [Chrome Web Store](https://chrome.google.com/webstore/detail/rivet/mobmnpcacgadhkjfelhpemphmmnggnod)
-- **Firefox**: coming soon
+- **Firefox**: See nightly release below for Firefox-compatible builds
 - **Safari**: coming soon
 
 ### Nightly Release
@@ -35,9 +35,10 @@ Rivet is aimed to be **contributor first & friendly**. If you would like to cont
 Rivet is currently in active development. If you would like to try out the latest features, you can download the latest nightly build below:
 
 - **Chromium (Chrome, Brave, Arc, etc)**: [Download](https://github.com/paradigmxyz/rivet/releases/latest)
+- **Firefox**: [Download](https://github.com/paradigmxyz/rivet/releases/latest) (look for `extension-firefox.zip`)
 
 <details>
-  <summary>Setup Instructions</summary>
+  <summary>Chromium Setup Instructions</summary>
   <ol>
     <li>Download the asset `extension.zip` from the link above</li>
     <li>Unzip the downloaded file</li>
@@ -46,6 +47,19 @@ Rivet is currently in active development. If you would like to try out the lates
     <li>Click <code>Load Unpacked</code> in the top left corner</li>
     <li>Select the unzipped folder</li>
     <li>Done! You should now see the Rivet extension in your browser</li>
+  <ol>
+</details>
+
+<details>
+  <summary>Firefox Setup Instructions</summary>
+  <ol>
+    <li>Download the asset `extension-firefox.zip` from the link above</li>
+    <li>Unzip the downloaded file</li>
+    <li>Open Firefox and navigate to <code>about:debugging#/runtime/this-firefox</code></li>
+    <li>Click <code>Load Temporary Add-on...</code></li>
+    <li>Navigate to the unzipped folder and select any file inside</li>
+    <li>Done! You should now see the Rivet extension in your browser</li>
+    <li>Note: The extension will be removed when you restart Firefox. For permanent installation, you'll need to sign the extension or use Firefox Developer Edition/Nightly with signing disabled.</li>
   <ol>
 </details>
 
@@ -143,9 +157,9 @@ This will run a script that will build the Web Extension, start a dev server for
 
 Rivet uses the `window.ethereum` interface, which means it has some known conflicts with other wallets which also rely on `window.ethereum`. Once Dapps start to integrate [EIP-6963](https://eips.ethereum.org/EIPS/eip-6963) to handle multiple injected wallets, this should not be a problem anymore.
 
-For best results it is recommended to run Rivet in it's own Chrome profile, without any other conflicting browser wallets installed.
+For best results it is recommended to run Rivet in it's own browser profile, without any other conflicting browser wallets installed.
 
-Helpful note: A fresh Chrome profile gets instantiated when running the dev script: `bun run dev`.
+Helpful note: A fresh Chrome profile gets instantiated when running the dev script: `bun run dev`. For Firefox, use `bun run dev:firefox`.
 
 ## Contributing
 
