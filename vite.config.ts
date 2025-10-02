@@ -7,8 +7,9 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 import { getManifest } from './manifest.config'
 
 const dev = process.env.NODE_ENV === 'development'
+const browser = (process.env.BROWSER || 'chrome') as 'chrome' | 'firefox'
 
-export const outDir = dev ? 'dist/dev' : 'dist/build'
+export const outDir = dev ? 'dist/dev' : `dist/build-${browser}`
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -32,7 +33,7 @@ export default defineConfig({
           'src/design-system/_playground/index.html',
         ],
       },
-      manifest: getManifest({ dev }),
+      manifest: getManifest({ dev, browser }),
     }),
   ],
 })
